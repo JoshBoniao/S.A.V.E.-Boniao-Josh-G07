@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}S.A.V.E. - Log in{% endblock %}
+
+{% block content %}
+<section class="auth">
+    {% include "partials/_aside.html" with aside_title="Welcome back." aside_text="Pick up where you left off and review your appliance usage and estimated costs." %}
+
+    <div class="panel">
+        <h2 class="panel-title">Log in</h2>
+        <p class="panel-sub">Use the username and password you registered with.</p>
+
+        <form method="post" class="form" novalidate>
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="alert" role="alert">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <div class="form-grid">
+                {% for field in form %}
+                    <div class="field field-wide">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <p class="field-error">{{ field.errors|join:" " }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Log in</button>
+        </form>
+
+        <p class="panel-foot">No account yet? <a href="{% url 'signup' %}">Sign up</a></p>
+    </div>
+</section>
+{% endblock %}

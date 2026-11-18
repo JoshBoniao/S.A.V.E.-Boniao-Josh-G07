@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}S.A.V.E. - Sign up{% endblock %}
+
+{% block content %}
+<section class="auth">
+    {% include "partials/_aside.html" %}
+
+    <div class="panel">
+        <h2 class="panel-title">Create your account</h2>
+        <p class="panel-sub">Start tracking appliance electricity use and cost for your household.</p>
+
+        <form method="post" class="form" novalidate>
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="alert" role="alert">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <div class="form-grid">
+                {% for field in form %}
+                    <div class="field{% if field.name == 'username' or field.name == 'email' or field.name == 'household_name' %} field-wide{% endif %}">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <p class="field-error">{{ field.errors|join:" " }}</p>
+                        {% endif %}
+                        {% if field.help_text and field.name != 'password1' %}
+                            <div class="field-help">{{ field.help_text }}</div>
+                        {% endif %}
+                    </div>
+                    {% if field.name == 'password2' %}
+                        <div class="field-help field-wide">{{ form.password1.help_text }}</div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Create account</button>
+        </form>
+
+        <p class="panel-foot">Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+    </div>
+</section>
+{% endblock %}
